@@ -141,7 +141,7 @@ jobs:
           name: sing-box-e5-${{ matrix.name }}
           path: sing-box*
 
-l5:
+  l5:
     runs-on: ubuntu-latest
     needs: go
     outputs:
@@ -405,7 +405,7 @@ l5:
             ./tmp-l5/
             ./tmp-puernya/
 
-- name: Move files and zip `sing-box E5` cores by `tar`
+      - name: Move files and zip `sing-box E5` cores by `tar`
         if: ${{ needs.e5.outputs.e5_skip_update != 'true' }}
         run: |
           # Linux
@@ -427,7 +427,7 @@ l5:
           mv -f ./tmp-e5/sing-box-e5-android-arm64/sing-box.exe ./sing-box/sing-box-e5-android-arm64
           rm -rf ./tmp-e5*
 
-- name: Move files and zip `sing-box L5` cores by `tar`
+      - name: Move files and zip `sing-box L5` cores by `tar`
         if: ${{ needs.l5.outputs.l5_skip_update != 'true' }}
         run: |
           # Linux
