@@ -124,7 +124,7 @@ jobs:
       - name: Set `NDK` path
         if: ${{ matrix.goos == 'android' }}
         run: |
-          echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.jobs.ndk}}-clang" >> $GITHUB_ENV
+          echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
           echo "BUILDTAG=" >> $GITHUB_ENV
 
@@ -240,7 +240,7 @@ jobs:
       - name: Set `NDK` path
         if: ${{ matrix.goos == 'android' }}
         run: |
-          echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.jobs.ndk}}-clang" >> $GITHUB_ENV
+          echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
           echo "BUILDTAG=" >> $GITHUB_ENV
 
@@ -359,7 +359,7 @@ jobs:
       - name: Set `NDK` path
         if: ${{ matrix.goos == 'android' }}
         run: |
-          echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.jobs.ndk}}-clang" >> $GITHUB_ENV
+          echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
           echo "BUILDTAG=" >> $GITHUB_ENV
 
