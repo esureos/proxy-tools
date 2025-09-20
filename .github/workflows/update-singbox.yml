@@ -399,91 +399,86 @@ jobs:
       - name: Download files from workspace
         uses: actions/download-artifact@v5
         with:
-          path: |
-            ./tmp-e5/
-            ./tmp-l5/
-            ./tmp-puernya/
+          path: ./tmp/
 
       - name: Move files and zip `sing-box E5` cores by `tar`
         if: ${{ needs.e5.outputs.e5_skip_update != 'true' }}
         run: |
           # Linux
-          mkdir -p ./tmp-e5/ ./sing-box/
+          mkdir -p ./sing-box/
           old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
           new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!old_name[@]}"; do
-            mv -f "./tmp-e5/sing-box-e5-linux-${old_name[i]}/sing-box" ./tmp-e5/CrashCore
-            chmod +x ./tmp-e5/CrashCore
-            tar --no-same-owner -czf "./sing-box/sing-box-e5-linux-${new_name[i]}.tar.gz" -C ./tmp-e5/ CrashCore
+            mv -f "./tmp/sing-box-e5-linux-${old_name[i]}/sing-box" ./tmp/CrashCore
+            chmod +x ./tmp/CrashCore
+            tar --no-same-owner -czf "./sing-box/sing-box-e5-linux-${new_name[i]}.tar.gz" -C ./tmp/ CrashCore
           done
 
           # Windows
           archs=(amd64 arm64)
           for arch in "${archs[@]}"; do
-            (cd "./tmp-e5/sing-box-e5-windows-${arch}" && zip -r "../../sing-box/sing-box-e5-windows-${arch}.zip" sing-box.exe)
+            (cd "./tmp/sing-box-e5-windows-${arch}" && zip -r "../../sing-box/sing-box-e5-windows-${arch}.zip" sing-box.exe)
           done
 
           # Android
           archs=(arm arm64)
           for arch in "${archs[@]}"; do
-            chmod +x "./tmp-puernya/sing-box-puernya-android-${arch}/sing-box"
-            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp-puernya/sing-box-puernya-android-${arch}" sing-box
+            chmod +x "./tmp/sing-box-e5-android-${arch}/sing-box"
+            tar --no-same-owner -czf "./sing-box/sing-box-e5-android-${arch}.tar.gz" -C "./tmp/sing-box-e5-android-${arch}" sing-box
           done
-          rm -rf ./tmp-e5*
 
       - name: Move files and zip `sing-box L5` cores by `tar`
         if: ${{ needs.l5.outputs.l5_skip_update != 'true' }}
         run: |
           # Linux
-          mkdir -p ./tmp-l5/ ./sing-box/
+          mkdir -p ./sing-box/
           old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
           new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!old_name[@]}"; do
-            mv -f "./tmp-l5/sing-box-l5-linux-${old_name[i]}/sing-box" ./tmp-l5/CrashCore
-            chmod +x ./tmp-l5/CrashCore
-            tar --no-same-owner -czf "./sing-box/sing-box-l5-linux-${new_name[i]}.tar.gz" -C ./tmp-l5/ CrashCore
+            mv -f "./tmp/sing-box-l5-linux-${old_name[i]}/sing-box" ./tmp/CrashCore
+            chmod +x ./tmp/CrashCore
+            tar --no-same-owner -czf "./sing-box/sing-box-l5-linux-${new_name[i]}.tar.gz" -C ./tmp/ CrashCore
           done
 
           # Windows
           archs=(amd64 arm64)
           for arch in "${archs[@]}"; do
-            (cd "./tmp-l5/sing-box-l5-windows-${arch}" && zip -r "../../sing-box/sing-box-l5-windows-${arch}.zip" sing-box.exe)
+            (cd "./tmp/sing-box-l5-windows-${arch}" && zip -r "../../sing-box/sing-box-l5-windows-${arch}.zip" sing-box.exe)
           done
 
           # Android
           archs=(arm arm64)
           for arch in "${archs[@]}"; do
-            chmod +x "./tmp-puernya/sing-box-puernya-android-${arch}/sing-box"
-            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp-puernya/sing-box-puernya-android-${arch}" sing-box
+            chmod +x "./tmp/sing-box-l5-android-${arch}/sing-box"
+            tar --no-same-owner -czf "./sing-box/sing-box-l5-android-${arch}.tar.gz" -C "./tmp/sing-box-l5-android-${arch}" sing-box
           done
-          rm -rf ./tmp-l5*
 
       - name: Move files and zip `sing-box PuerNya` cores by `tar`
         if: ${{ needs.puernya.outputs.puernya_skip_update != 'true' }}
         run: |
           # Linux
-          mkdir -p ./tmp-puernya/ ./sing-box/
+          mkdir -p ./sing-box/
           old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
           new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!old_name[@]}"; do
-            mv -f "./tmp-puernya/sing-box-puernya-linux-${old_name[i]}/sing-box" ./tmp-puernya/CrashCore
-            chmod +x ./tmp-puernya/CrashCore
-            tar --no-same-owner -czf "./sing-box/sing-box-puernya-linux-${new_name[i]}.tar.gz" -C ./tmp-puernya/ CrashCore
+            mv -f "./tmp/sing-box-puernya-linux-${old_name[i]}/sing-box" ./tmp/CrashCore
+            chmod +x ./tmp/CrashCore
+            tar --no-same-owner -czf "./sing-box/sing-box-puernya-linux-${new_name[i]}.tar.gz" -C ./tmp/ CrashCore
           done
 
           # Windows
           archs=(amd64 arm64)
           for arch in "${archs[@]}"; do
-            (cd "./tmp-puernya/sing-box-puernya-windows-${arch}" && zip -r "../../sing-box/sing-box-puernya-windows-${arch}.zip" sing-box.exe)
+            (cd "./tmp/sing-box-puernya-windows-${arch}" && zip -r "../../sing-box/sing-box-puernya-windows-${arch}.zip" sing-box.exe)
           done
 
           # Android
           archs=(arm arm64)
           for arch in "${archs[@]}"; do
-            chmod +x "./tmp-puernya/sing-box-puernya-android-${arch}/sing-box"
-            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp-puernya/sing-box-puernya-android-${arch}" sing-box
+            chmod +x "./tmp/sing-box-puernya-android-${arch}/sing-box"
+            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp/sing-box-puernya-android-${arch}" sing-box
           done
-          rm -rf ./tmp-puernya*
+          rm -rf ./tmp*
 
       - name: Set variables
         run: |
