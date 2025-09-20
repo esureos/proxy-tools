@@ -387,7 +387,7 @@ jobs:
       - puernya
       - puernya_cross
     env:
-      l5_VERSION: ${{ needs.e5.outputs.e5_version }}
+      e5_VERSION: ${{ needs.e5.outputs.e5_version }}
       e5_TIME: ${{ needs.e5.outputs.e5_time }}
       l5_VERSION: ${{ needs.l5.outputs.l5_version }}
       l5_TIME: ${{ needs.l5.outputs.l5_time }}
@@ -419,12 +419,17 @@ jobs:
           done
 
           # Windows
-          mv -f ./tmp-e5/sing-box-e5-windows-amd64/sing-box.exe ./sing-box/sing-box-e5-windows-amd64.exe
-          mv -f ./tmp-e5/sing-box-e5-windows-arm64/sing-box.exe ./sing-box/sing-box-e5-windows-arm64.exe
-          
+          archs=(amd64 arm64)
+          for arch in "${archs[@]}"; do
+            (cd "./tmp-e5/sing-box-e5-windows-${arch}" && zip -r "../../sing-box/sing-box-e5-windows-${arch}.zip" sing-box.exe)
+          done
+
           # Android
-          mv -f ./tmp-e5/sing-box-e5-android-arm/sing-box.exe ./sing-box/sing-box-e5-android-arm
-          mv -f ./tmp-e5/sing-box-e5-android-arm64/sing-box.exe ./sing-box/sing-box-e5-android-arm64
+          archs=(arm arm64)
+          for arch in "${archs[@]}"; do
+            chmod +x "./tmp-puernya/sing-box-puernya-android-${arch}/sing-box"
+            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp-puernya/sing-box-puernya-android-${arch}" sing-box
+          done
           rm -rf ./tmp-e5*
 
       - name: Move files and zip `sing-box L5` cores by `tar`
@@ -441,12 +446,17 @@ jobs:
           done
 
           # Windows
-          mv -f ./tmp-l5/sing-box-l5-windows-amd64/sing-box.exe ./sing-box/sing-box-l5-windows-amd64.exe
-          mv -f ./tmp-l5/sing-box-l5-windows-arm64/sing-box.exe ./sing-box/sing-box-l5-windows-arm64.exe
+          archs=(amd64 arm64)
+          for arch in "${archs[@]}"; do
+            (cd "./tmp-l5/sing-box-l5-windows-${arch}" && zip -r "../../sing-box/sing-box-l5-windows-${arch}.zip" sing-box.exe)
+          done
 
           # Android
-          mv -f ./tmp-l5/sing-box-l5-android-arm/sing-box.exe ./sing-box/sing-box-l5-android-arm
-          mv -f ./tmp-l5/sing-box-l5-android-arm64/sing-box.exe ./sing-box/sing-box-l5-android-arm64
+          archs=(arm arm64)
+          for arch in "${archs[@]}"; do
+            chmod +x "./tmp-puernya/sing-box-puernya-android-${arch}/sing-box"
+            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp-puernya/sing-box-puernya-android-${arch}" sing-box
+          done
           rm -rf ./tmp-l5*
 
       - name: Move files and zip `sing-box PuerNya` cores by `tar`
@@ -463,12 +473,17 @@ jobs:
           done
 
           # Windows
-          mv -f ./tmp-puernya/sing-box-puernya-windows-amd64/sing-box.exe ./sing-box/sing-box-puernya-windows-amd64.exe
-          mv -f ./tmp-puernya/sing-box-puernya-windows-arm64/sing-box.exe ./sing-box/sing-box-puernya-windows-arm64.exe
+          archs=(amd64 arm64)
+          for arch in "${archs[@]}"; do
+            (cd "./tmp-puernya/sing-box-puernya-windows-${arch}" && zip -r "../../sing-box/sing-box-puernya-windows-${arch}.zip" sing-box.exe)
+          done
 
           # Android
-          mv -f ./tmp-puernya/sing-box-puernya-android-arm/sing-box.exe ./sing-box/sing-box-puernya-android-arm
-          mv -f ./tmp-puernya/sing-box-puernya-android-arm64/sing-box.exe ./sing-box/sing-box-puernya-android-arm64
+          archs=(arm arm64)
+          for arch in "${archs[@]}"; do
+            chmod +x "./tmp-puernya/sing-box-puernya-android-${arch}/sing-box"
+            tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp-puernya/sing-box-puernya-android-${arch}" sing-box
+          done
           rm -rf ./tmp-puernya*
 
       - name: Set variables
@@ -519,20 +534,13 @@ jobs:
           # Windows
           archs=(amd64 arm64)
           for arch in "${archs[@]}"; do
-            mkdir -p "./tmp-release/release_windows_${arch}"
-            wget -P "./tmp-release/release_windows_${arch}/" "${download_url}/${release_version}/sing-box-${release_version#v}-windows-${arch}.zip"
-            unzip -o "./tmp-release/release_windows_${arch}/sing-box-${release_version#v}-windows-${arch}.zip" -d "./tmp-release/release_windows_${arch}/"
-            mv -f "./tmp-release/release_windows_${arch}/sing-box-${release_version#v}-windows-${arch}/sing-box.exe" "./sing-box/sing-box-release-windows-${arch}.exe"
+            curl -L "${download_url}/${release_version}/sing-box-${release_version#v}-windows-${arch}.zip" -o "./sing-box/sing-box-release-windows-${arch}.zip"
           done
 
           # Android
           archs=(arm arm64)
           for arch in "${archs[@]}"; do
-            mkdir -p "./tmp-release/release_android_${arch}"
-            curl -L "${download_url}/${release_version}/sing-box-${release_version#v}-android-${arch}.tar.gz" | tar -zx -C "./tmp-release/release_android_${arch}/"
-            mv -f "./tmp-release/release_android_${arch}/sing-box-${release_version#v}-android-${arch}/sing-box" "./sing-box/sing-box-release-android-${arch}"
-            chmod +x "./sing-box/sing-box-release-android-${arch}"
-            tar --no-same-owner -czf "./sing-box/sing-box-release-android-${arch}.tar.gz" -C "./sing-box/sing-box-release-android-${arch}"
+            curl -L "${download_url}/${release_version}/sing-box-${release_version#v}-android-${arch}.tar.gz" -o "./sing-box/sing-box-release-android-${arch}.tar.gz"
           done
           rm -rf ./tmp-release*
 
@@ -554,20 +562,13 @@ jobs:
           # Windows
           archs=(amd64 arm64)
           for arch in "${archs[@]}"; do
-            mkdir -p "./tmp-dev/dev_windows_${arch}"
-            wget -P "./tmp-dev/dev_windows_${arch}/" "${download_url}/${dev_version}/sing-box-${dev_version#v}-windows-${arch}.zip"
-            unzip -o "./tmp-dev/dev_windows_${arch}/sing-box-${dev_version#v}-windows-${arch}.zip" -d "./tmp-dev/dev_windows_${arch}/"
-            mv -f "./tmp-dev/dev_windows_${arch}/sing-box-${dev_version#v}-windows-${arch}/sing-box.exe" "./sing-box/sing-box-dev-windows-${arch}.exe"
+            curl -L "${download_url}/${dev_version}/sing-box-${dev_version#v}-windows-${arch}.zip" -o "./sing-box/sing-box-dev-windows-${arch}.zip"
           done
 
           # Android
           archs=(arm arm64)
           for arch in "${archs[@]}"; do
-            mkdir -p "./tmp-dev/dev_android_${arch}"
-            curl -L "${download_url}/${dev_version}/sing-box-${dev_version#v}-android-${arch}.tar.gz" | tar -zx -C "./tmp-dev/dev_android_${arch}/"
-            mv -f "./tmp-dev/dev_android_${arch}/sing-box-${dev_version#v}-android-${arch}/sing-box" "./sing-box/sing-box-dev-android-${arch}"
-            chmod +x "./sing-box/sing-box-dev-android-${arch}"
-            tar --no-same-owner -czf "./sing-box/sing-box-dev-android-${arch}.tar.gz" -C "./sing-box/sing-box-dev-android-${arch}"
+            curl -L "${download_url}/${dev_version}/sing-box-${dev_version#v}-android-${arch}.tar.gz" -o "./sing-box/sing-box-dev-android-${arch}.tar.gz"
           done
           rm -rf ./tmp-dev*
 
