@@ -149,11 +149,11 @@ jobs:
       l5_tags: ${{ steps.l5.outputs.l5_tags }}
       l5_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Checkout `main-next`
+      - name: Checkout `dev-next`
         uses: actions/checkout@v5
         with:
           repository: lux5am/sing-box
-          ref: main-next
+          ref: dev-next
           fetch-depth: 0
 
       - name: Setup `Go`
@@ -219,11 +219,11 @@ jobs:
       l5_VERSION: ${{ needs.l5.outputs.l5_version }}
       l5_TAGS: ${{ needs.l5.outputs.l5_tags }}
     steps:
-      - name: Checkout `main-next`
+      - name: Checkout `dev-next`
         uses: actions/checkout@v5
         with:
           repository: lux5am/sing-box
-          ref: main-next
+          ref: dev-next
 
       - name: Setup `Go`
         uses: actions/setup-go@v6
