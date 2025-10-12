@@ -49,7 +49,7 @@ jobs:
         id: e5
         run: |
           git remote add sekai https://github.com/SagerNet/sing-box.git
-          git fetch --tags sekai --force
+          git fetch --tags sekai
           echo "e5_version=$(CGO_ENABLED=0 go run ./cmd/internal/read_tag)" >> $GITHUB_OUTPUT
           echo "e5_time=$(git log -1 --format=%cd --date=format:'%Y-%m-%d' $(echo "$e5_version" | awk -F '-' '{print $3}'))" >> $GITHUB_OUTPUT
           echo "e5_tags=with_quic,with_dhcp,with_gvisor,with_utls,with_clash_api,with_provider" >> $GITHUB_OUTPUT
@@ -149,11 +149,11 @@ jobs:
       l5_tags: ${{ steps.l5.outputs.l5_tags }}
       l5_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Checkout `dev-next`
+      - name: Checkout `main-next`
         uses: actions/checkout@v5
         with:
           repository: lux5am/sing-box
-          ref: dev-next
+          ref: main-next
           fetch-depth: 0
 
       - name: Setup `Go`
@@ -219,11 +219,11 @@ jobs:
       l5_VERSION: ${{ needs.l5.outputs.l5_version }}
       l5_TAGS: ${{ needs.l5.outputs.l5_tags }}
     steps:
-      - name: Checkout `dev-next`
+      - name: Checkout `main-next`
         uses: actions/checkout@v5
         with:
           repository: lux5am/sing-box
-          ref: dev-next
+          ref: main-next
 
       - name: Setup `Go`
         uses: actions/setup-go@v6
