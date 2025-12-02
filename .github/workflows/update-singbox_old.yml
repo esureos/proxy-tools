@@ -24,7 +24,6 @@ jobs:
         run: |
           echo "version=$(curl -sSL https://raw.githubusercontent.com/actions/go-versions/update-versions-manifest-file/versions-manifest.json | jq -r '.[0].version')" >> $GITHUB_OUTPUT
 
-<<<<<<< HEAD
   e5:
     runs-on: ubuntu-latest
     needs: go
@@ -258,22 +257,19 @@ jobs:
           path: sing-box*
 
   puernya:
-=======
-  ref1nd-main:
->>>>>>> merge/main
     runs-on: ubuntu-latest
     needs: go
     outputs:
-      ref1nd_main_version: ${{ steps.ref1nd_main.outputs.ref1nd_main_version }}
-      ref1nd_main_time: ${{ steps.ref1nd_main.outputs.ref1nd_main_time }}
-      ref1nd_main_tags: ${{ steps.ref1nd_main.outputs.ref1nd_main_tags }}
-      ref1nd_main_skip_update: ${{ steps.compare.outputs.skip_update }}
+      puernya_version: ${{ steps.puernya.outputs.puernya_version }}
+      puernya_time: ${{ steps.puernya.outputs.puernya_time }}
+      puernya_tags: ${{ steps.puernya.outputs.puernya_tags }}
+      puernya_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Checkout `reF1nd-main`
-        uses: actions/checkout@v6
+      - name: Checkout `building`
+        uses: actions/checkout@v5
         with:
-          repository: reF1nd/sing-box
-          ref: reF1nd-main
+          repository: PuerNya/sing-box
+          ref: building
           fetch-depth: 0
 
       - name: Setup `Go`
@@ -281,39 +277,33 @@ jobs:
         with:
           go-version: ${{ needs.go.outputs.go_version }}
 
-      - name: Get `sing-box reF1nd-main` version
-        id: ref1nd_main
+      - name: Get `sing-box PuerNya` version
+        id: puernya
         run: |
           git remote add sekai https://github.com/SagerNet/sing-box.git
           git fetch --tags sekai
-<<<<<<< HEAD
           echo "puernya_version=$(CGO_ENABLED=0 go run ./cmd/internal/read_tag)" >> $GITHUB_OUTPUT
           echo "puernya_time=$(git log -1 --format=%cd --date=format:'%Y-%m-%d' $(echo "$puernya_version" | awk -F '-' '{print $3}'))" >> $GITHUB_OUTPUT
           echo "puernya_tags=with_quic,with_dhcp,with_wireguard,with_shadowsocksr,with_ech,with_utls,with_clash_api,with_gvisor" >> $GITHUB_OUTPUT
           echo "CGO_ENABLED=0" >> $GITHUB_ENV
           echo "BUILDTAG=-extldflags -static" >> $GITHUB_ENV
-=======
-          echo "ref1nd_main_version=$(git tag -l --sort=v:refname | grep -Po '^v?\K[0-9]+\.[0-9]+\.[0-9]+$' | tail -n1)" >> $GITHUB_OUTPUT
-          echo "ref1nd_main_time=$(git log -1 --format=%cd --date=format:'%Y-%m-%d' $(echo "$ref1nd_main_version" | awk -F '-' '{print $3}'))" >> $GITHUB_OUTPUT
-          echo "ref1nd_main_tags=with_gvisor,with_quic,with_dhcp,with_wireguard,with_utls,with_acme,with_clash_api,with_tailscale" >> $GITHUB_OUTPUT
->>>>>>> merge/main
 
-      - name: Compare `sing-box reF1nd-main` versions with current release
+      - name: Compare `sing-box PuerNya` versions with current release
         id: compare
         run: |
           current_body=$(curl -sSL "https://api.github.com/repos/${{ github.repository }}/releases/tags/sing-box" | jq -r '.body // ""')
-          if echo "$current_body" | grep -q "${{ steps.ref1nd_main.outputs.ref1nd_main_version }}.*${{ steps.ref1nd_main.outputs.ref1nd_main_time }}"; then
-            echo "当前 sing-box reF1nd-main 版本已是最新版本 ${{ steps.ref1nd_main.outputs.ref1nd_main_version }}，无需更新"
+          if echo "$current_body" | grep -q "${{ steps.puernya.outputs.puernya_version }}.*${{ steps.puernya.outputs.puernya_time }}"; then
+            echo "当前 sing-box PuerNya 版本已是最新版本 ${{ steps.puernya.outputs.puernya_version }}，无需更新"
             skip_update=true
           else
-            echo "当前 sing-box reF1nd-main 版本较低，需要更新最新版本至 ${{ steps.ref1nd_main.outputs.ref1nd_main_version }}"
+            echo "当前 sing-box PuerNya 版本较低，需要更新最新版本至 ${{ steps.puernya.outputs.puernya_version }}"
             skip_update=false
           fi
           echo "skip_update=$skip_update" >> $GITHUB_OUTPUT
 
-  ref1nd-main_cross:
+  puernya_cross:
     runs-on: ubuntu-latest
-    if: ${{ needs.ref1nd-main.outputs.ref1nd_main_skip_update != 'true' }}
+    if: ${{ needs.puernya.outputs.puernya_skip_update != 'true' }}
     strategy:
       matrix:
         include:
@@ -325,7 +315,6 @@ jobs:
           - { name: linux-arm64, goos: linux, goarch: arm64 }
           - { name: linux-mips-softfloat, goos: linux, goarch: mips, gomips: softfloat }
           - { name: linux-mipsle-softfloat, goos: linux, goarch: mipsle, gomips: softfloat }
-          - { name: linux-mipsle-hardfloat, goos: linux, goarch: mipsle, gomips: hardfloat }
           # windows
           - { name: windows-amd64, goos: windows, goarch: amd64, goamd64: v3 }
           - { name: windows-arm64, goos: windows, goarch: arm64 }
@@ -336,34 +325,30 @@ jobs:
       fail-fast: false
     needs:
       - go
-      - ref1nd-main
+      - puernya
     env:
       GOOS: ${{ matrix.goos }}
       GOARCH: ${{ matrix.goarch }}
       GOAMD64: ${{ matrix.goamd64 }}
       GOARM: ${{ matrix.goarm }}
       GOMIPS: ${{ matrix.gomips }}
-<<<<<<< HEAD
       puernya_VERSION: ${{ needs.puernya.outputs.puernya_version }}
       puernya_TAGS: ${{ needs.puernya.outputs.puernya_tags }}
-=======
-      CGO_ENABLED: 0
-      ref1nd_main_VERSION: ${{ needs.ref1nd-main.outputs.ref1nd_main_version }}
-      ref1nd_main_TAGS: ${{ needs.ref1nd-main.outputs.ref1nd_main_tags }}
->>>>>>> merge/main
     steps:
-      - name: Checkout `reF1nd-main`
-        uses: actions/checkout@v6
+      - name: Checkout `building`
+        uses: actions/checkout@v5
         with:
-          repository: reF1nd/sing-box
-          ref: reF1nd-main
+          repository: PuerNya/sing-box
+          ref: building
+
+      - name: Fix sniff
+        run: sed -i 's/sniffHosts/sniffHost/' ./experimental/clashapi/trafficontrol/tracker.go
 
       - name: Setup `Go`
         uses: actions/setup-go@v6
         with:
           go-version: ${{ needs.go.outputs.go_version }}
 
-<<<<<<< HEAD
       - name: Setup `NDK`
         if: ${{ matrix.goos == 'android' }}
         uses: nttld/setup-ndk@v1
@@ -383,120 +368,17 @@ jobs:
         run: |
           echo "CGO_ENABLED=${CGO_ENABLED}"
           go build -v -trimpath -ldflags "${BUILDTAG} -checklinkname=0 -X 'github.com/sagernet/sing-box/constant.Version=${puernya_VERSION}' -s -w -buildid=" -tags "${puernya_TAGS}" ./cmd/sing-box
-=======
-      - name: Build `sing-box reF1nd-main` core
-        id: build
-        run: go build -v -trimpath -ldflags "-checklinkname=0 -X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_main_VERSION}' -s -w -buildid=" -tags "${ref1nd_main_TAGS}" ./cmd/sing-box
->>>>>>> merge/main
 
       - name: Upload files to workspace
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
-          name: sing-box-ref1nd-main-${{ matrix.name }}
-          path: sing-box*
-
-  ref1nd-dev:
-    runs-on: ubuntu-latest
-    needs: go
-    outputs:
-      ref1nd_dev_version: ${{ steps.ref1nd_dev.outputs.ref1nd_dev_version }}
-      ref1nd_dev_time: ${{ steps.ref1nd_dev.outputs.ref1nd_dev_time }}
-      ref1nd_dev_tags: ${{ steps.ref1nd_dev.outputs.ref1nd_dev_tags }}
-      ref1nd_dev_skip_update: ${{ steps.compare.outputs.skip_update }}
-    steps:
-      - name: Checkout `reF1nd-dev`
-        uses: actions/checkout@v6
-        with:
-          repository: reF1nd/sing-box
-          ref: reF1nd-dev
-          fetch-depth: 0
-
-      - name: Setup `Go`
-        uses: actions/setup-go@v6
-        with:
-          go-version: ${{ needs.go.outputs.go_version }}
-
-      - name: Get `sing-box reF1nd-dev` version
-        id: ref1nd_dev
-        run: |
-          git remote add sekai https://github.com/SagerNet/sing-box.git
-          git fetch --tags sekai
-          echo "ref1nd_dev_version=$(git tag -l --sort=v:refname | grep -Po '^v\K.*(alpha|beta|rc).*' | tail -n1)" >> $GITHUB_OUTPUT
-          echo "ref1nd_dev_time=$(git log -1 --format=%cd --date=format:'%Y-%m-%d' $(echo "$ref1nd_dev_version" | awk -F '-' '{print $3}'))" >> $GITHUB_OUTPUT
-          echo "ref1nd_dev_tags=with_gvisor,with_quic,with_dhcp,with_wireguard,with_utls,with_acme,with_clash_api,with_tailscale,with_ccm,badlinkname,tfogo_checklinkname0" >> $GITHUB_OUTPUT
-
-      - name: Compare `sing-box reF1nd-dev` versions with current release
-        id: compare
-        run: |
-          current_body=$(curl -sSL "https://api.github.com/repos/${{ github.repository }}/releases/tags/sing-box" | jq -r '.body // ""')
-          if echo "$current_body" | grep -q "${{ steps.ref1nd_dev.outputs.ref1nd_dev_version }}.*${{ steps.ref1nd_dev.outputs.ref1nd_dev_time }}"; then
-            echo "当前 sing-box reF1nd-dev 版本已是最新版本 ${{ steps.ref1nd_dev.outputs.ref1nd_dev_version }}，无需更新"
-            skip_update=true
-          else
-            echo "当前 sing-box reF1nd-dev 版本较低，需要更新最新版本至 ${{ steps.ref1nd_dev.outputs.ref1nd_dev_version }}"
-            skip_update=false
-          fi
-          echo "skip_update=$skip_update" >> $GITHUB_OUTPUT
-
-  ref1nd-dev_cross:
-    runs-on: ubuntu-latest
-    if: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_skip_update != 'true' }}
-    strategy:
-      matrix:
-        include:
-          # linux
-          - { name: linux-amd64, goos: linux, goarch: amd64, goamd64: v1 }
-          - { name: linux-armv5, goos: linux, goarch: arm, goarm: 5 }
-          - { name: linux-armv6, goos: linux, goarch: arm, goarm: 6 }
-          - { name: linux-armv7, goos: linux, goarch: arm, goarm: 7 }
-          - { name: linux-arm64, goos: linux, goarch: arm64 }
-          - { name: linux-mips-softfloat, goos: linux, goarch: mips, gomips: softfloat }
-          - { name: linux-mipsle-softfloat, goos: linux, goarch: mipsle, gomips: softfloat }
-          - { name: linux-mipsle-hardfloat, goos: linux, goarch: mipsle, gomips: hardfloat }
-          # windows
-          - { name: windows-amd64, goos: windows, goarch: amd64, goamd64: v1 }
-          - { name: windows-arm64, goos: windows, goarch: arm64 }
-
-      fail-fast: false
-    needs:
-      - go
-      - ref1nd-dev
-    env:
-      GOOS: ${{ matrix.goos }}
-      GOARCH: ${{ matrix.goarch }}
-      GOAMD64: ${{ matrix.goamd64 }}
-      GOARM: ${{ matrix.goarm }}
-      GOMIPS: ${{ matrix.gomips }}
-      CGO_ENABLED: 0
-      ref1nd_dev_VERSION: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_version }}
-      ref1nd_dev_TAGS: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_tags }}
-    steps:
-      - name: Checkout `reF1nd-dev`
-        uses: actions/checkout@v6
-        with:
-          repository: reF1nd/sing-box
-          ref: reF1nd-dev
-
-      - name: Setup `Go`
-        uses: actions/setup-go@v6
-        with:
-          go-version: ${{ needs.go.outputs.go_version }}
-
-      - name: Build `sing-box reF1nd-dev` core
-        id: build
-        run: go build -v -trimpath -ldflags "-checklinkname=0 -X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_dev_VERSION}' -s -w -buildid=" -tags "${ref1nd_dev_TAGS}" ./cmd/sing-box
-
-      - name: Upload files to workspace
-        uses: actions/upload-artifact@v5
-        with:
-          name: sing-box-ref1nd-dev-${{ matrix.name }}
+          name: sing-box-puernya-${{ matrix.name }}
           path: sing-box*
 
   push_sing-box:
     runs-on: ubuntu-latest
     if: always()
     needs:
-<<<<<<< HEAD
       - e5
       - e5_cross
       - l5
@@ -510,25 +392,13 @@ jobs:
       l5_TIME: ${{ needs.l5.outputs.l5_time }}
       puernya_VERSION: ${{ needs.puernya.outputs.puernya_version }}
       puernya_TIME: ${{ needs.puernya.outputs.puernya_time }}
-=======
-      - ref1nd-main
-      - ref1nd-main_cross
-      - ref1nd-dev
-      - ref1nd-dev_cross
-    env:
-      ref1nd_main_VERSION: ${{ needs.ref1nd-main.outputs.ref1nd_main_version }}
-      ref1nd_main_TIME: ${{ needs.ref1nd-main.outputs.ref1nd_main_time }}
-      ref1nd_dev_VERSION: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_version }}
-      ref1nd_dev_TIME: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_time }}
->>>>>>> merge/main
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
 
       - name: Download files from workspace
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v5
         with:
-<<<<<<< HEAD
           path: ./tmp/
 
       - name: Move files and zip `sing-box E5` cores by `tar`
@@ -582,15 +452,11 @@ jobs:
             chmod +x "./tmp/sing-box-l5-android-${arch}/sing-box"
             tar --no-same-owner -czf "./sing-box/sing-box-l5-android-${arch}.tar.gz" -C "./tmp/sing-box-l5-android-${arch}" sing-box
           done
-=======
-          path: ./tmp-ref1nd/
->>>>>>> merge/main
 
-      - name: Move files and zip `sing-box reF1nd-main` cores by `tar`
-        if: ${{ needs.ref1nd-main.outputs.ref1nd_main_skip_update != 'true' }}
+      - name: Move files and zip `sing-box PuerNya` cores by `tar`
+        if: ${{ needs.puernya.outputs.puernya_skip_update != 'true' }}
         run: |
           # Linux
-<<<<<<< HEAD
           mkdir -p ./sing-box/
           old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
           new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
@@ -613,38 +479,6 @@ jobs:
             tar --no-same-owner -czf "./sing-box/sing-box-puernya-android-${arch}.tar.gz" -C "./tmp/sing-box-puernya-android-${arch}" sing-box
           done
           rm -rf ./tmp*
-=======
-          mkdir -p ./tmp-ref1nd/ ./sing-box/
-          old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          for i in "${!old_name[@]}"; do
-            mv -f "./tmp-ref1nd/sing-box-ref1nd-main-linux-${old_name[i]}/sing-box" ./tmp-ref1nd/CrashCore
-            chmod +x ./tmp-ref1nd/CrashCore
-            tar --no-same-owner -czf "./sing-box/sing-box-ref1nd-main-linux-${new_name[i]}.tar.gz" -C ./tmp-ref1nd/ CrashCore
-          done
-
-          # Windows
-          mv -f ./tmp-ref1nd/sing-box-ref1nd-main-windows-amd64/sing-box.exe ./sing-box/sing-box-ref1nd-main-windows-amd64.exe
-          mv -f ./tmp-ref1nd/sing-box-ref1nd-main-windows-arm64/sing-box.exe ./sing-box/sing-box-ref1nd-main-windows-arm64.exe
-
-      - name: Move files and zip `sing-box reF1nd-dev` cores by `tar`
-        if: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_skip_update != 'true' }}
-        run: |
-          # Linux
-          mkdir -p ./tmp-ref1nd/ ./sing-box/
-          old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          for i in "${!old_name[@]}"; do
-            mv -f "./tmp-ref1nd/sing-box-ref1nd-dev-linux-${old_name[i]}/sing-box" ./tmp-ref1nd/CrashCore
-            chmod +x ./tmp-ref1nd/CrashCore
-            tar --no-same-owner -czf "./sing-box/sing-box-ref1nd-dev-linux-${new_name[i]}.tar.gz" -C ./tmp-ref1nd/ CrashCore
-          done
-
-          # Windows
-          mv -f ./tmp-ref1nd/sing-box-ref1nd-dev-windows-amd64/sing-box.exe ./sing-box/sing-box-ref1nd-dev-windows-amd64.exe
-          mv -f ./tmp-ref1nd/sing-box-ref1nd-dev-windows-arm64/sing-box.exe ./sing-box/sing-box-ref1nd-dev-windows-arm64.exe
-          rm -rf ./tmp-ref1nd*
->>>>>>> merge/main
 
       - name: Set variables
         run: |
@@ -681,8 +515,8 @@ jobs:
         run: |
           # Linux
           mkdir -p ./sing-box/
-          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat mipsle-hardfloat)
+          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
+          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!linux_old_name[@]}"; do
             mkdir -p "./tmp-release/release_linux_${linux_old_name[i]}"
             curl -L "${download_url}/${release_version}/sing-box-${release_version#v}-linux-${linux_old_name[i]}.tar.gz" | tar -zx -C "./tmp-release/release_linux_${linux_old_name[i]}/"
@@ -709,8 +543,8 @@ jobs:
         run: |
           # Linux
           mkdir -p ./sing-box/
-          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat mipsle-hardfloat)
+          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
+          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!linux_old_name[@]}"; do
             mkdir -p "./tmp-dev/dev_linux_${linux_old_name[i]}"
             curl -L "${download_url}/${dev_version}/sing-box-${dev_version#v}-linux-${linux_old_name[i]}.tar.gz" | tar -zx -C "./tmp-dev/dev_linux_${linux_old_name[i]}/"
@@ -752,14 +586,9 @@ jobs:
           tag: sing-box
           overwrite: true
           body: |
-<<<<<<< HEAD
             更新 [sing-box E5 版](https://github.com/CHIZI-0618/sing-box/tree/dev-next)至 ${{ env.e5_VERSION }}，发布于 ${{ env.e5_TIME }}
             更新 [sing-box l5 版](https://github.com/lux5am/sing-box/tree/dev-next)至 ${{ env.l5_VERSION }}，发布于 ${{ env.l5_TIME }}
             更新 [sing-box PuerNya 版](https://github.com/PuerNya/sing-box/tree/building)至 v${{ env.puernya_VERSION }}，发布于 ${{ env.puernya_TIME }}
-=======
-            更新 [sing-box reF1nd-main 版](https://github.com/PuerNya/sing-box/tree/building)至 v${{ env.ref1nd_main_VERSION }}，发布于 ${{ env.ref1nd_main_TIME }}
-            更新 [sing-box reF1nd-dev 版](https://github.com/PuerNya/sing-box/tree/building)至 v${{ env.ref1nd_dev_VERSION }}，发布于 ${{ env.ref1nd_dev_TIME }}
->>>>>>> merge/main
             更新 [sing-box Release 版](https://github.com/SagerNet/sing-box/tree/main)至 ${{ env.release_version }}，发布于 ${{ env.release_time }}
             更新 [sing-box Dev 版](https://github.com/SagerNet/sing-box/tree/dev)至 ${{ env.dev_version }}，发布于 ${{ env.dev_time }}
           file_glob: true
