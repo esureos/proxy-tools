@@ -363,8 +363,8 @@ jobs:
         run: |
           # Linux
           mkdir -p ./sing-box/
-          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat mipsle-hardfloat)
+          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
+          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!linux_old_name[@]}"; do
             mkdir -p "./tmp-release/release_linux_${linux_old_name[i]}"
             curl -L "${download_url}/${release_version}/sing-box-${release_version#v}-linux-${linux_old_name[i]}.tar.gz" | tar -zx -C "./tmp-release/release_linux_${linux_old_name[i]}/"
@@ -391,8 +391,8 @@ jobs:
         run: |
           # Linux
           mkdir -p ./sing-box/
-          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
-          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat mipsle-hardfloat)
+          linux_old_name=(amd64 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat)
+          linux_new_name=(amd64 armv5 armv6 armv7 armv8 mips-softfloat mipsle-softfloat)
           for i in "${!linux_old_name[@]}"; do
             mkdir -p "./tmp-dev/dev_linux_${linux_old_name[i]}"
             curl -L "${download_url}/${dev_version}/sing-box-${dev_version#v}-linux-${linux_old_name[i]}.tar.gz" | tar -zx -C "./tmp-dev/dev_linux_${linux_old_name[i]}/"
