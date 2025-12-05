@@ -424,7 +424,7 @@ jobs:
         run: |
           if ls ./sing-box/* >/dev/null 2>&1; then
             echo "sing-box 文件夹内存在新内核文件，需要上传"
-            echo "singbox_exist=true" >> $GITHUB_OUTPUT
+          echo "singbox_exist=true" >> $GITHUB_OUTPUT
           else
             echo "sing-box 文件夹内没有新内核文件，无需上传"
             echo "singbox_exist=false" >> $GITHUB_OUTPUT
