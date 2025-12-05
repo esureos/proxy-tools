@@ -1,4 +1,4 @@
-name: Update sing-box_e5&l5&pu
+name: Update sing-box_ple
 on:
   workflow_dispatch:
   schedule:
@@ -497,8 +497,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: sing-box
-          tag: sing-box
+          release_name: sing-box_ple
+          tag: sing-box_ple
           overwrite: true
           body: |
             更新 [sing-box E5 版](https://github.com/CHIZI-0618/sing-box/tree/dev-next)至 ${{ env.e5_VERSION }}，发布于 ${{ env.e5_TIME }}

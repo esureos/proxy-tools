@@ -131,7 +131,6 @@ jobs:
       - name: Build `sing-box reF1nd-main` core
         id: build
         run: |
-          # echo "CGO_ENABLED=${CGO_ENABLED}"
           go build -v -trimpath -ldflags "-checklinkname=0 -X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_main_VERSION}' -s -w -buildid=" -tags "${ref1nd_main_TAGS}" ./cmd/sing-box
 
       - name: Upload files to workspace
@@ -246,7 +245,6 @@ jobs:
       - name: Build `sing-box reF1nd-dev` core
         id: build
         run: |
-          # echo "CGO_ENABLED=${CGO_ENABLED}"
           go build -v -trimpath -ldflags "-checklinkname=0 -X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_dev_VERSION}' -s -w -buildid=" -tags "${ref1nd_dev_TAGS}" ./cmd/sing-box
 
       - name: Upload files to workspace
@@ -295,7 +293,6 @@ jobs:
           for arch in "${archs[@]}"; do
             (cd "./tmp-ref1nd/sing-box-ref1nd-main-windows-${arch}" && zip -r "../../sing-box/sing-box-ref1nd-main-windows-${arch}.zip" sing-box.exe)
           done
-          rm -rf ./tmp-ref1nd*
 
           # Android
           archs=(arm arm64)
@@ -323,7 +320,6 @@ jobs:
           for arch in "${archs[@]}"; do
             (cd "./tmp-ref1nd/sing-box-ref1nd-dev-windows-${arch}" && zip -r "../../sing-box/sing-box-ref1nd-dev-windows-${arch}.zip" sing-box.exe)
           done
-          rm -rf ./tmp-ref1nd*
 
           # Android
           archs=(arm arm64)
