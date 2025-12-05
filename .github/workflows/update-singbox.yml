@@ -12,7 +12,7 @@ on:
       - ".github/workflows/update-adguardhome.yml"
       - ".github/workflows/update-dashboard.yml"
       - ".github/workflows/update-mihomo.yml"
-      - ".github/workflows/update-singbox_old.yml"
+      - ".github/workflows/update-singbox_ple.yml"
 
 jobs:
   go:

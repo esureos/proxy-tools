@@ -12,6 +12,7 @@ on:
       - ".github/workflows/update-adguardhome.yml"
       - ".github/workflows/update-dashboard.yml"
       - ".github/workflows/update-singbox.yml"
+      - ".github/workflows/update-singbox_ple.yml"
 
 jobs:
   Update:
