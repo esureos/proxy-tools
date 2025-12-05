@@ -300,7 +300,6 @@ jobs:
             chmod +x "./tmp-ref1nd/sing-box-ref1nd-main-android-${arch}/sing-box"
             tar --no-same-owner -czf "./sing-box/sing-box-ref1nd-main-android-${arch}.tar.gz" -C "./tmp-ref1nd/sing-box-ref1nd-main-android-${arch}" sing-box
           done
-          rm -rf ./tmp-ref1nd*
 
       - name: Move files and zip `sing-box reF1nd-dev` cores by `tar`
         if: ${{ needs.ref1nd-dev.outputs.ref1nd_dev_skip_update != 'true' }}
