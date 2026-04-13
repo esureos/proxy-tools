@@ -521,7 +521,7 @@ jobs:
           mkdir -p ./sing-box/
           linux_archs=(amd64-v1 amd64-v3 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
           for i in "${!linux_archs[@]}"; do
-            chmod +x ./sing-box/sing-box-ref1nd-stable-linux-${linux_archs[i]}
+            chmod +x ./sing-box/sing-box-ref1nd-stable-linux-${linux_archs[i]}/sing-box
             cp -f "./tmp/sing-box-ref1nd-stable-linux-${linux_archs[i]}/sing-box" ./sing-box/sing-box-ref1nd-stable-linux-${linux_archs[i]}.upx
           done
 
@@ -545,7 +545,7 @@ jobs:
           mkdir -p ./sing-box/
           linux_archs=(amd64-v1 amd64-v3 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
           for i in "${!linux_archs[@]}"; do
-            chmod +x ./sing-box/sing-box-ref1nd-test-linux-${linux_archs[i]}
+            chmod +x ./sing-box/sing-box-ref1nd-test-linux-${linux_archs[i]}/sing-box
             cp -f "./tmp/sing-box-ref1nd-test-linux-${linux_archs[i]}/sing-box" ./sing-box/sing-box-ref1nd-test-linux-${linux_archs[i]}.upx
           done
 
@@ -569,7 +569,7 @@ jobs:
           mkdir -p ./sing-box/
           linux_archs=(amd64-v1 amd64-v3 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
           for i in "${!linux_archs[@]}"; do
-            chmod +x ./sing-box/sing-box-stable-linux-${linux_archs[i]}
+            chmod +x ./sing-box/sing-box-stable-linux-${linux_archs[i]}/sing-box
             cp -f "./tmp/sing-box-stable-linux-${linux_archs[i]}/sing-box" ./sing-box/sing-box-stable-linux-${linux_archs[i]}.upx
           done
 
@@ -593,7 +593,7 @@ jobs:
           mkdir -p ./sing-box/
           linux_archs=(amd64-v1 amd64-v3 armv5 armv6 armv7 arm64 mips-softfloat mipsle-softfloat mipsle-hardfloat)
           for i in "${!linux_archs[@]}"; do
-            chmod +x ./sing-box/sing-box-test-linux-${linux_archs[i]}
+            chmod +x ./sing-box/sing-box-test-linux-${linux_archs[i]}/sing-box
             cp -f "./tmp/sing-box-test-linux-${linux_archs[i]}/sing-box" ./sing-box/sing-box-test-linux-${linux_archs[i]}.upx
           done
 
