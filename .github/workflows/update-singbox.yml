@@ -116,7 +116,7 @@ jobs:
       - name: Set `build tags`
         id: tags
         run: |
-          if [[ "${{ matrix.goos }}" == "linux" | "android" ]]; then
+          if [[ "${{ matrix.goos }}" == "linux" || "${{ matrix.goos }}" == "android" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_ebpf" >> "${GITHUB_OUTPUT}"
           elif [[ "${{ matrix.goos }}" == "windows" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_tailscale,with_gvisor" >> "${GITHUB_OUTPUT}"
@@ -237,7 +237,7 @@ jobs:
       - name: Set `build tags`
         id: tags
         run: |
-          if [[ "${{ matrix.goos }}" == "linux" | "android" ]]; then
+          if [[ "${{ matrix.goos }}" == "linux" || "${{ matrix.goos }}" == "android" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_ebpf" >> "${GITHUB_OUTPUT}"
           elif [[ "${{ matrix.goos }}" == "windows" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_tailscale" >> "${GITHUB_OUTPUT}"
