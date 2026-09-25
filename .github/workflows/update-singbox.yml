@@ -20,24 +20,11 @@ permissions:
 jobs:
   ref1nd_stable_version:
     runs-on: ubuntu-latest
-    needs: go
     outputs:
       ref1nd_stable_version: ${{ steps.version.outputs.ref1nd_stable_version }}
       ref1nd_stable_time: ${{ steps.version.outputs.ref1nd_stable_time }}
       ref1nd_stable_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Checkout `reF1nd-stable`
-        uses: actions/checkout@v6
-        with:
-          repository: reF1nd/sing-box
-          ref: reF1nd-stable
-          fetch-depth: 0
-
-      - name: Setup `Go`
-        uses: actions/setup-go@v6
-        with:
-          go-version: ${{ needs.go.outputs.go_version }}
-
       - name: Get `sing-box reF1nd-Stable` version
         id: version
         run: |
@@ -129,14 +116,11 @@ jobs:
       - name: Set `build tags`
         id: tags
         run: |
-          if [[ "${{ matrix.goos }}" == "linux" ]]; then
+          if [[ "${{ matrix.goos }}" == "linux" | "android" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api" >> "${GITHUB_OUTPUT}"
           elif [[ "${{ matrix.goos }}" == "windows" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_tailscale,with_gvisor" >> "${GITHUB_OUTPUT}"
           fi
-
-      - name: Build `sing-box reF1nd-Stable` core
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_stable_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Setup `NDK`
         if: ${{ matrix.goos == 'android' }}
@@ -151,9 +135,8 @@ jobs:
           echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
 
-      - name: Build `sing-box reF1nd-Stable` core (Android)
-        if: ${{ matrix.goos == 'android' }}
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_stable_VERSION}' -s -w -buildid=" -tags "${ref1nd_stable_linux_TAGS}" ./cmd/sing-box
+      - name: Build `sing-box reF1nd-Stable` core
+        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_stable_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Upload files to workspace
         uses: actions/upload-artifact@v7
@@ -163,24 +146,11 @@ jobs:
 
   ref1nd_testing_version:
     runs-on: ubuntu-latest
-    needs: go
     outputs:
       ref1nd_testing_version: ${{ steps.version.outputs.ref1nd_testing_version }}
       ref1nd_testing_time: ${{ steps.version.outputs.ref1nd_testing_time }}
       ref1nd_testing_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Checkout `reF1nd-testing`
-        uses: actions/checkout@v6
-        with:
-          repository: reF1nd/sing-box
-          ref: reF1nd-testing
-          fetch-depth: 0
-
-      - name: Setup `Go`
-        uses: actions/setup-go@v6
-        with:
-          go-version: ${{ needs.go.outputs.go_version }}
-
       - name: Get `sing-box reF1nd-Test` version
         id: version
         run: |
@@ -267,14 +237,11 @@ jobs:
       - name: Set `build tags`
         id: tags
         run: |
-          if [[ "${{ matrix.goos }}" == "linux" ]]; then
+          if [[ "${{ matrix.goos }}" == "linux" | "android" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api" >> "${GITHUB_OUTPUT}"
           elif [[ "${{ matrix.goos }}" == "windows" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_tailscale" >> "${GITHUB_OUTPUT}"
           fi
-
-      - name: Build `sing-box reF1nd-Testing` core
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_testing_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Setup `NDK`
         if: ${{ matrix.goos == 'android' }}
@@ -289,9 +256,8 @@ jobs:
           echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
 
-      - name: Build `sing-box reF1nd-Testing` core (Android)
-        if: ${{ matrix.goos == 'android' }}
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_testing_VERSION}' -s -w -buildid=" -tags "${ref1nd_testing_linux_TAGS}" ./cmd/sing-box
+      - name: Build `sing-box reF1nd-Testing` core
+        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${ref1nd_testing_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Upload files to workspace
         uses: actions/upload-artifact@v6
@@ -301,24 +267,11 @@ jobs:
 
   singbox_stable_version:
     runs-on: ubuntu-latest
-    needs: go
     outputs:
       singbox_stable_version: ${{ steps.version.outputs.singbox_stable_version }}
       singbox_stable_time: ${{ steps.version.outputs.singbox_stable_time }}
       singbox_stable_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Checkout `stable`
-        uses: actions/checkout@v6
-        with:
-          repository: SagerNet/sing-box
-          ref: stable
-          fetch-depth: 0
-
-      - name: Setup `Go`
-        uses: actions/setup-go@v6
-        with:
-          go-version: ${{ needs.go.outputs.go_version }}
-
       - name: Get `sing-box Stable` version
         id: version
         run: |
@@ -405,14 +358,11 @@ jobs:
       - name: Set `build tags`
         id: tags
         run: |
-          if [[ "${{ matrix.goos }}" == "linux" ]]; then
+          if [[ "${{ matrix.goos }}" == "linux" | "android" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api" >> "${GITHUB_OUTPUT}"
           elif [[ "${{ matrix.goos }}" == "windows" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_tailscale,with_gvisor" >> "${GITHUB_OUTPUT}"
           fi
-
-      - name: Build `sing-box Stable` core
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${singbox_stable_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Setup `NDK`
         if: ${{ matrix.goos == 'android' }}
@@ -427,9 +377,8 @@ jobs:
           echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
 
-      - name: Build `sing-box sing-box Stable` core (Android)
-        if: ${{ matrix.goos == 'android' }}
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${singbox_stable_VERSION}' -s -w -buildid=" -tags "${singbox_stable_linux_TAGS}" ./cmd/sing-box
+      - name: Build `sing-box Stable` core
+        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${singbox_stable_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Upload files to workspace
         uses: actions/upload-artifact@v6
@@ -439,24 +388,11 @@ jobs:
 
   singbox_testing_version:
     runs-on: ubuntu-latest
-    needs: go
     outputs:
       singbox_testing_version: ${{ steps.version.outputs.singbox_testing_version }}
       singbox_testing_time: ${{ steps.version.outputs.singbox_testing_time }}
       singbox_testing_skip_update: ${{ steps.compare.outputs.skip_update }}
     steps:
-      - name: Get `sing-box Testing` version
-        uses: actions/checkout@v6
-        with:
-          repository: SagerNet/sing-box
-          ref: testing
-          fetch-depth: 0
-
-      - name: Setup `Go`
-        uses: actions/setup-go@v6
-        with:
-          go-version: ${{ needs.go.outputs.go_version }}
-
       - name: Get `sing-box Test` version
         id: version
         run: |
@@ -543,14 +479,11 @@ jobs:
       - name: Set `build tags`
         id: tags
         run: |
-          if [[ "${{ matrix.goos }}" == "linux" ]]; then
+          if [[ "${{ matrix.goos }}" == "linux" | "android" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api" >> "${GITHUB_OUTPUT}"
           elif [[ "${{ matrix.goos }}" == "windows" ]]; then
             echo "build_tags=with_quic,with_utls,with_clash_api,with_tailscale" >> "${GITHUB_OUTPUT}"
           fi
-
-      - name: Build `sing-box Testing` core
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${singbox_testing_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Setup `NDK`
         if: ${{ matrix.goos == 'android' }}
@@ -565,9 +498,8 @@ jobs:
           echo "CC=${{steps.setup-ndk.outputs.ndk-path}}/toolchains/llvm/prebuilt/linux-x86_64/bin/${{matrix.ndk}}-clang" >> $GITHUB_ENV
           echo "CGO_ENABLED=1" >> $GITHUB_ENV
 
-      - name: Build `sing-box sing-box Testing` core (Android)
-        if: ${{ matrix.goos == 'android' }}
-        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${singbox_testing_VERSION}' -s -w -buildid=" -tags "${singbox_testing_linux_TAGS}" ./cmd/sing-box
+      - name: Build `sing-box Testing` core
+        run: go build -v -trimpath -ldflags "-X 'github.com/sagernet/sing-box/constant.Version=${singbox_testing_VERSION}' -s -w -buildid=" -tags "${{ steps.tags.outputs.build_tags }}" ./cmd/sing-box
 
       - name: Upload files to workspace
         uses: actions/upload-artifact@v6
