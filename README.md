@@ -10,9 +10,10 @@
 **注：**
 - 1. 本教程中的下载链接以 CPU 架构 ARM64 为例，请注意修改链接后缀
 - 2. 查看 CPU 架构可连接 SSH 后执行命令 `uname -ms`，若执行结果是“linux aarch64”，就是搭载的 ARM64 架构
-- 3. 本项目中 mihomo 内核和 sing-box 内核 Linux 端已精简 `gvisor` 和 `tailscale`
-- 4. 本项目中 mihomo 内核、sing-box 内核和 AdGuard Home 的 Linux 端均采用 [UPX](https://github.com/upx/upx) 压缩方式
-- 5. 对下载源的说明，可[点此](https://proxy-tutorials.dustinwin.cc.cd/about/#%E5%AF%B9%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%9A%84%E8%AF%B4%E6%98%8E)了解
+- 3. 本项目中 mihomo 内核 Linux 端已精简 [fake_tcp](https://wiki.metacubex.one/config/proxies/hysteria/)（Hysteria 1）、[Tailscale](https://wiki.metacubex.one/config/proxies/tailscale/)、[ZeroTier](https://wiki.metacubex.one/config/proxies/zerotier/)、[EasyTier](https://wiki.metacubex.one/config/proxies/easytier/) 和 [gvisor](https://wiki.metacubex.one/config/inbound/tun/#stack)
+- 4. sing-box 内核 Linux 端已精简 [Tailscale](https://sing-box.sagernet.org/zh/configuration/endpoint/tailscale/) 和 [gvisor](https://sing-box.sagernet.org/configuration/inbound/tun/#stack)
+- 5. 本项目中 mihomo 内核、sing-box 内核和 AdGuard Home 的 Linux 端均采用 [UPX](https://github.com/upx/upx) 压缩方式
+- 6. 对下载源的说明，可[点此](https://proxy-tutorials.dustinwin.cc.cd/about/#%E5%AF%B9%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%9A%84%E8%AF%B4%E6%98%8E)了解
 
 # 二、 使用方法
 ## 1. 导入内核（以 [ShellCrash](https://github.com/juewuy/ShellCrash) 导入内核为例）
@@ -22,17 +23,17 @@
 连接 SSH 后执行如下命令：
 ```shell
 # mihomo 内核 Meta 版
-curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-meta-linux-arm64.upx && sc
+curl -fo /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-meta-linux-arm64.upx && sc
 # mihomo 内核 Alpha 版
-curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-alpha-linux-arm64.upx && sc
+curl -fo /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-alpha-linux-arm64.upx && sc
 # sing-box 内核 reF1nd-Stable 版
-curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-stable-linux-arm64.upx && sc
+curl -fo /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-stable-linux-arm64.upx && sc
 # sing-box 内核 reF1nd-Testing 版
-curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-testing-linux-arm64.upx && sc
+curl -fo /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-testing-linux-arm64.upx && sc
 # sing-box 内核 Stable 版
-curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-stable-linux-arm64.upx && sc
+curl -fo /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-stable-linux-arm64.upx && sc
 # sing-box 内核 Testing 版
-curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-testing-linux-arm64.upx && sc
+curl -fo /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-testing-linux-arm64.upx && sc
 ```
 此时脚本会自动“发现可用的内核文件”，选择 1 加载，后选择对应的内核  
 </details>
@@ -42,17 +43,17 @@ curl -sS -o /tmp/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWi
 连接 SSH 后执行如下命令：
 ```shell
 # mihomo 内核 Meta 版
-curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-meta-linux-arm64.upx && $CRASHDIR/start.sh restart
+curl -fo "${CRASHDIR}/CrashCore.upx" -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-meta-linux-arm64.upx && "${CRASHDIR}/start.sh" restart
 # mihomo 内核 Alpha 版
-curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-alpha-linux-arm64.upx && $CRASHDIR/start.sh restart
+curl -fo "${CRASHDIR}/CrashCore.upx" -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/mihomo/mihomo-alpha-linux-arm64.upx && "${CRASHDIR}/start.sh" restart
 # sing-box 内核 reF1nd-Stable 版
-curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-stable-linux-arm64.upx && $CRASHDIR/start.sh restart
+curl -fo "${CRASHDIR}/CrashCore.upx" -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-stable-linux-arm64.upx && "${CRASHDIR}/start.sh" restart
 # sing-box 内核 reF1nd-Testing 版
-curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-testing-linux-arm64.upx && $CRASHDIR/start.sh restart
+curl -fo "${CRASHDIR}/CrashCore.upx" -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-ref1nd-testing-linux-arm64.upx && "${CRASHDIR}/start.sh" restart
 # sing-box 内核 Stable 版
-curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-stable-linux-arm64.upx && $CRASHDIR/start.sh restart
+curl -fo "${CRASHDIR}/CrashCore.upx" -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-stable-linux-arm64.upx && "${CRASHDIR}/start.sh" restart
 # sing-box 内核 Testing 版
-curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-testing-linux-arm64.upx && $CRASHDIR/start.sh restart
+curl -fo "${CRASHDIR}/CrashCore.upx" -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/sing-box/sing-box-testing-linux-arm64.upx && "${CRASHDIR}/start.sh" restart
 ```
 </details>
 
@@ -68,13 +69,13 @@ curl -sS -o $CRASHDIR/CrashCore.upx -L https://ghfast.top/https://github.com/Dus
 连接 SSH 后执行如下命令：
 ```shell
 # Yacd-meta
-curl -sS -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/Yacd-meta.tar.gz | tar -zx -C $CRASHDIR/ui/ && $CRASHDIR/start.sh restart
+curl -fL https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/Yacd-meta.tar.gz | tar -zx -C "${CRASHDIR}/ui/" && "${CRASHDIR}/start.sh" restart
 # metacubexd
-curl -sS -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/metacubexd.tar.gz | tar -zx -C $CRASHDIR/ui/ && $CRASHDIR/start.sh restart
+curl -fL https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/metacubexd.tar.gz | tar -zx -C "${CRASHDIR}/ui/" && "${CRASHDIR}/start.sh" restart
 # zashboard
-curl -sS -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/zashboard.tar.gz | tar -zx -C $CRASHDIR/ui/ && $CRASHDIR/start.sh restart
+curl -fL https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/zashboard.tar.gz | tar -zx -C "${CRASHDIR}/ui/" && "${CRASHDIR}/start.sh" restart
 # sing-box dashboard
-curl -sS -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/sing-box-dashboard.tar.gz | tar -zx -C $CRASHDIR/ui/ && $CRASHDIR/start.sh restart
+curl -fL https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/sing-box-dashboard.tar.gz | tar -zx -C "${CRASHDIR}/ui/" && "${CRASHDIR}/start.sh" restart
 ```
 - 注：若使用基于 [Chromium 项目](https://www.chromium.org/Home/)开发的浏览器无法访问在线 Dashboard 面板时，以 [Chrome 浏览器](https://www.google.com/chrome/)为例，需要设置该网址域名“允许显示不安全内容”。方法如下：  
 进入设置 → 隐私和安全 → 网站设置 → 更多内容设置 → 不安全内容（或者地址栏直接打开 chrome://settings/content/insecureContent 进行设置），在“允许显示不安全内容”内添加网址域名如：`board.zash.run.place`
@@ -87,9 +88,9 @@ curl -sS -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases
 ```shell
 mkdir -p /data/AdGuardHome
 # AdGuard Home Release 版
-curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_release_linux_arm64
+curl -fo /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_release_linux_arm64
 # AdGuard Home Beta 版
-curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_beta_linux_arm64
+curl -fo /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_beta_linux_arm64
 chmod +x /data/AdGuardHome/AdGuardHome
 cat <<'EOF' > /data/AdGuardHome/AdGuardHome.sh
 #!/bin/sh /etc/rc.common
@@ -143,9 +144,9 @@ EOF
 连接 SSH 后执行如下命令：
 ```shell
 # AdGuard Home Release 版
-curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_release_linux_arm64
+curl -fo /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_release_linux_arm64
 # AdGuard Home Beta 版
-curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_beta_linux_arm64
+curl -fo /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_beta_linux_arm64
 /data/AdGuardHome/AdGuardHome -s restart
 ```
 </details>
@@ -153,10 +154,10 @@ curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.c
 # 三、 扩展（以 ShellCrash 配置定时任务为例）
 可在 ShellCrash 里添加定时更新 mihomo 内核、sing-box 内核、zashboard 和 AdGuard Home 的任务
 1. 进入 ShellCrash → 9) 更新与支持 → 2) 切换/更新内核文件 → 6) 使用自定义内核 → 9) 自定义内核链接，输入导入内核命令里的链接并回车，后“请确认该自定义内核的类型”
-2. 连接 SSH 后执行 `vi $CRASHDIR/configs/task/task.user`，按一下 Ins 键（Insert 键），粘贴如下内容：
+2. 连接 SSH 后执行 `vi "${CRASHDIR}/configs/task/task.user"`，按一下 Ins 键（Insert 键），粘贴如下内容：
 ```shell
-201#curl -sS -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/zashboard.tar.gz | tar -zx -C $CRASHDIR/ui/ && $CRASHDIR/start.sh restart >/dev/null 2>&1#更新zashboard
-202#curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_beta_linux_arm64 && /data/AdGuardHome/AdGuardHome -s restart >/dev/null 2>&1#更新AdGuardHome
+201#curl -fL https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/Dashboard/zashboard.tar.gz | tar -zx -C "${CRASHDIR}/ui/" && "${CRASHDIR}/start.sh" restart >/dev/null 2>&1#更新zashboard
+202#curl -fo /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.com/DustinWin/proxy-tools/releases/download/AdGuardHome/AdGuardHome_beta_linux_arm64 && /data/AdGuardHome/AdGuardHome -s restart >/dev/null 2>&1#更新AdGuardHome
 ```
 3. 按一下 Esc 键（退出键），输入英文冒号 `:`，继续输入 `wq` 并回车
 4. 执行 `sc`，进入 ShellCrash → 5 配置自动任务 → 1 添加自动任务，选择“8) 自动更新内核”和末尾处添加的定时任务，输入对应的数字并回车后可设置执行条件
@@ -166,4 +167,5 @@ curl -sS -o /data/AdGuardHome/AdGuardHome -L https://ghfast.top/https://github.c
 <img src="https://raw.githubusercontent.com/DustinWin/dustinwin.github.io/main/assets/img/pin/wechat.png" alt="微信" width="30%" />
 
 # 机场推荐
-[Bitz Net](https://red.bnaffred.com/#/register?code=HT0ALWZq)（仅次于一线机场，推荐打折时购买）
+[Bitz Net](https://red.bnaffred.com/#/register?code=HT0ALWZq)（仅次于一线机场，推荐打折时购买）  
+6 折优惠码：`26SURVEY6`（有效期暂不确定）
