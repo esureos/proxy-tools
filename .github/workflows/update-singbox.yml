@@ -618,7 +618,7 @@ jobs:
           done
 
       - name: Download `sing-box Testing` files
-        if: ${{ env.singbox_testing_Skip_update != 'true' }}
+        if: ${{ env.singbox_testing_SKIP_UPDATE != 'true' }}
         run: |
           # Linux (Ready for compress cores by `UPX`)
           mkdir -p ./sing-box/
